@@ -1,0 +1,44 @@
+<% layout('layouts/boilerplate') %>
+<div class="row">
+    <h1 class="text-center">Edit Skatepark</h1>
+    <div class="col-md-6 offset-md-3">
+        <form action="/skateparks/<%= skatepark._id %>?_method=PUT" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label class="form-lable" for="title">Title</label>
+                <input class="form-control" type="text" id="title" name="skatepark[title]" required value="<%= skatepark.title %>">
+            </div>
+            <div class="mb-3">
+                <label class="form-lable" for="location">Location</label>
+                <input class="form-control" type="text" id="location" name="skatepark[location]" required value="<%= skatepark.location %>">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="price">Skatepark Price</label>
+                <div class="input-group">
+                    <span class="input-group-text" id="price-label">$</span>
+                    <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="price" aria-describedby="price-label" name="skatepark[price]" required value="<%= skatepark.price %>">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-lable" for="description">Description</label>
+                <textarea class="form-control" type="text" id="description" name="skatepark[description]" required><%= skatepark.description %></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="image">Add Additional Image(s)</label>
+                <input class="form-control" type="file" name="image" id="image" multiple>
+            </div>
+            <div class="mb-3">
+                <% skatepark.images.forEach(function(img, i) { %>
+                    <img src="<%= img.thumbnail %>" alt="" class="img-thumbnail">
+                    <div class="form-check-inline">
+                        <input type="checkbox" name="deleteImages[]" id="image-<%= i %>" value="<%= img.filename %>"> 
+                    </div>
+                    <label for="image-<%= i %>">Delete?</label>
+                <% }) %>
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-info">Update Skatepark</button>
+            </div>
+        </form>
+        <a href="/skateparks/<%= skatepark._id %>">Back To Skatepark</a>
+    </div>
+</div>
