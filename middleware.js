@@ -27,7 +27,7 @@ module.exports.isSkateparkAuthor = async (req, res, next) => {
     const { id } = req.params;
     const skatepark = await Skatepark.findById(id);
     if (!skatepark.author.equals(req.user._id)) {
-        // req.flash('error', 'You do not have permission to do that!');
+        req.flash('error', 'You do not have permission to do that!');
         res.redirect(`/skateparks/${id}`);
     } else {
         next();
@@ -38,7 +38,7 @@ module.exports.isReviewAuthor = async (req, res, next) => {
     const { id, reviewId } = req.params;
     const review = await Review.findById(reviewId);
     if (!review.author.equals(req.user._id)) {
-        // req.flash('error', 'You do not have permission to do that!');
+        req.flash('error', 'You do not have permission to do that!');
         res.redirect(`/skateparks/${id}`);
     } else {
         next();
