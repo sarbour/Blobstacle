@@ -1,7 +1,7 @@
 const Skatepark = require('../models/skatepark');
-// const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
-// const mapBoxToken = process.env.MAPBOX_TOKEN;
-// const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
+const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
+const mapBoxToken = process.env.MAPBOX_TOKEN;
+const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
 const { cloudinary } = require("../cloudinary");
 
 module.exports.index = async (req, res, next) => {
@@ -27,7 +27,7 @@ module.exports.createSkatepark = async (req, res, next) => {
     res.redirect(`/skateparks/${skatepark._id}`);
 }
 
-module.exports.showCampground = async (req, res, next) => {
+module.exports.showSkatepark = async (req, res, next) => {
     const skatepark = await Skatepark.findById(req.params.id).populate({
         path: 'reviews',
         populate: {
@@ -51,7 +51,7 @@ module.exports.renderEditForm = async (req, res, next) => {
     res.render('skateparks/edit', { skatepark });
 }
 
-module.exports.updateCampground = async (req, res, next) => {
+module.exports.updateSkatepark = async (req, res, next) => {
     const { id } = req.params;
     const skatepark = await Skatepark.findByIdAndUpdate(id, { ...req.body.skatepark });
     const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
@@ -67,7 +67,7 @@ module.exports.updateCampground = async (req, res, next) => {
     res.redirect(`/skateparks/${skatepark._id}`);
 }
 
-module.exports.deleteCampground = async (req, res, next) => {
+module.exports.deleteSkatepark = async (req, res, next) => {
     const { id } = req.params
     await Skatepark.findByIdAndDelete(id);
     for (let image of skatepark.images) {
