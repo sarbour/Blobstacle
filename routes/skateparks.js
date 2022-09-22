@@ -17,7 +17,7 @@ router.route('/')
 router.get('/new', isLoggedIn, skateparks.renderNewForm)
 
 router.route('/:id')
-    .get(catchAsync(skateparks.showSkateparks))
+    .get(catchAsync(skateparks.showSkatepark))
     .put(isLoggedIn, isSkateparkAuthor, upload.array('image'), validateSkatepark, catchAsync(skateparks.updateSkatepark))
     .delete(isLoggedIn, isSkateparkAuthor, catchAsync(skateparks.deleteSkatepark))
 

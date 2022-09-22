@@ -1,4 +1,6 @@
-require('dotenv').config();
+if (process.env.NODE_ENV !== "production") {
+    require('dotenv').config();
+}
 
 const express = require('express');
 const path = require('path');
@@ -7,6 +9,7 @@ const ejsMate = require('ejs-mate');
 const session = require('express-session');
 const flash = require('connect-flash');
 const morgan = require('morgan');
+const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
 const passport = require('passport');
 const localStrategy = require('passport-local');
@@ -14,13 +17,12 @@ const User = require('./models/user');
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
 
-const ExpressError = require('./utils/ExpressError');
-
-const userRoutes = require('./routes/users');
+const userRoutes = require('./routes/users')
 const skateparkRoutes = require('./routes/skateparks');
-const reviewRoutes = require('./routes/reviews');
+const reviewRoutes =  require('./routes/reviews');
 
-const dbUrl = process.env.DB_URL;
+// const dbUrl = process.env.DB_URL;
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp';
 
 const MongoDBStore = require('connect-mongo');
 
@@ -44,7 +46,7 @@ app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(mongoSanitize());
 
-const secret = process.env.SECRET;
+const secret = process.env.SECRET || 'thisshouldbeabettersecret!';
 
 const store = MongoDBStore.create({
     mongoUrl: dbUrl,
@@ -83,6 +85,7 @@ const scriptSrcUrls = [
     "https://cdnjs.cloudflare.com/",
     "https://cdn.jsdelivr.net",
 ];
+//This is the array that needs added to
 const styleSrcUrls = [
     "https://stackpath.bootstrapcdn.com/",
     "https://kit-free.fontawesome.com/",
@@ -142,7 +145,7 @@ app.use('/skateparks/:id/reviews', reviewRoutes);
 
 app.get('/', (req, res) => {
     res.render('home');
-})
+}) 
 
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page Not Found', 404));

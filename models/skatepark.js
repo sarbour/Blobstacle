@@ -13,7 +13,7 @@ ImageSchema.virtual('thumbnail').get(function() {
 
 const opts = { toJSON: { virtuals: true } };
 
-const skateparkSchema = new Schema({
+const SkateparkSchema = new Schema({
     title: String,
     images: [ImageSchema],
     geometry: {
@@ -42,14 +42,14 @@ const skateparkSchema = new Schema({
     ]
 }, opts);
 
-skateparkSchema.virtual('properties.popUpMarkup').get(function() {
+SkateparkSchema.virtual('properties.popUpMarkup').get(function() {
     return `
         <strong><a href="/skateparks/${this._id}">${this.title}</a></strong>
         <p>${this.location}</p>
         `
 })
 
-skateparkSchema.post('findOneAndDelete', async function (doc) {
+SkateparkSchema.post('findOneAndDelete', async function (doc) {
     if (doc) {
         await Review.deleteMany({
             _id: {
@@ -59,4 +59,4 @@ skateparkSchema.post('findOneAndDelete', async function (doc) {
     }
 })
 
-module.exports = mongoose.model('Skatepark', skateparkSchema);
+module.exports = mongoose.model('Skatepark', SkateparkSchema);
